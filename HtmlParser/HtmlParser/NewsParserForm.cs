@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 using HtmlParser.Parsers;
+using System.Text.RegularExpressions;
 
 namespace HtmlParser
 {
@@ -15,14 +16,22 @@ namespace HtmlParser
         {
             if(e.KeyCode == Keys.Enter)
             {
-                if (ParserManager.isLinkOk(PathTextBox.Text))
+                if (looksLikeTruth(PathTextBox.Text))
                 {
-                    ParserManager.ChooseOperation(PathTextBox.Text);
-                    toXmlButton.Visible = true;
+                    if (isLinkOk(PathTextBox.Text))
+                    {
+                        StatusLabel.Text = "Известный источник";
+                        ParserManager.JustDoIt(PathTextBox.Text);
+                        toXmlButton.Visible = true;
+                    }
+                    else
+                    {
+                        StatusLabel.Text = "Ссылка неправильная";
+                    }
                 }
                 else
                 {
-                    PathTextBox.Text = "Ссылка неправильная";
+                    StatusLabel.Text = "Ссылка неправильная";
                 }
             }
         }
@@ -32,9 +41,10 @@ namespace HtmlParser
             OpenFileDialog openFileDialog = new OpenFileDialog();
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                if (ParserManager.ChooseOperation(openFileDialog.FileName))
+                if (isLinkOk(openFileDialog.FileName))
                 {
-                    StatusLabel.Text = "Файл успешно загружен";
+                    StatusLabel.Text = "Известный источник";
+                    ParserManager.JustDoIt(PathTextBox.Text);
                     toXmlButton.Visible = true;
                 }
                 else
@@ -56,6 +66,22 @@ namespace HtmlParser
             {
                 StatusLabel.Text = "Нечего конвертировать";
             }
+        }
+
+        private bool looksLikeTruth(string link)
+        {
+            if (Regex.IsMatch(link, @"^http\w?://") || Regex.IsMatch(link, @"^\w:\\"))
+                return true;
+            return false;
+        }
+
+        private bool isLinkOk(string link)
+        {
+            if (Regex.IsMatch(link, @"^http\w?://"))
+                return ParserManager.IsSiteKnown(link);
+            else if (Regex.IsMatch(link, @"^\w:\\"))
+                return ParserManager.IsFileSourceKnown(link);
+            return false;
         }
     }
 }

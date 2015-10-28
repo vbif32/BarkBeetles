@@ -9,9 +9,8 @@ namespace HtmlParser
     static class Program
     {
         public static List<ArticleBase> articleList;
+        public static ParserManager parserManager;
         public static WebClient wClient;
-
-
         public static Encoding encode = Encoding.GetEncoding("utf-8");
 
         [STAThread]
@@ -20,6 +19,7 @@ namespace HtmlParser
             wClient = new WebClient();
             wClient.Proxy = null;
             wClient.Encoding = encode;
+            parserManager = new ParserManager();
 
             System.Windows.Forms.Application.EnableVisualStyles();
             System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);

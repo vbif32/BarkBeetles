@@ -73,7 +73,8 @@
     <Compile Include="NewsParserForm.Designer.cs">
       <DependentUpon>NewsParserForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Parsers\ParserManager.cs" />
+    <Compile Include="ParserManager.cs" />
+    <Compile Include="Parsers\ParserBase.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="NewsParserForm.resx">
