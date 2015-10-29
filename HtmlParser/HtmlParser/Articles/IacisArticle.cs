@@ -3,12 +3,13 @@ using System.Collections.Generic;
 
 namespace HtmlParser
 {
+    [Serializable]
     public class IacisArticle : ArticleBase
     {
-        private string _author;
-        private string _dateOfPublication;
-        private string _imageCaption;
-        private List<string> _images;
+        protected string _author;
+        protected string _dateOfPublication;
+        protected string _imageCaption;
+        protected List<string> _images;
 
         public IacisArticle()
         {
@@ -79,7 +80,5 @@ namespace HtmlParser
                 _images = value;
             }
         }
-        
-        
     }
 }

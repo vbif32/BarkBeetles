@@ -2,81 +2,108 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
 using System.Text.RegularExpressions;
+using System.Xml.Serialization;
 
 namespace HtmlParser.Parsers
 {
     public class ParserManager
     {
         private const string pattern = @"<!-- saved from url=.*-->$";
-        private Type LastUsedParser;
-        private static HashSet<string> _knownSitses = new HashSet<string>
+        private ParserBase LastUsedParser;
+        private Dictionary<string, ParserBase> _knownSites = new Dictionary<string, ParserBase>
         {
-            { IacisParser._siteDomen }
+            { IacisParser.SiteDomen, new IacisParser() }
         };
 
-        public static List<string> GetArticlesLinks(HtmlDocument doc)
+        public string TryParse(string link)
         {
-            return null;
+            try
+            {
+                if (IsLinkOk(link))
+                {
+                    string source = link.StartsWith("http") ? link : GetFileSourceLink(link);
+                    Program.articleList = ChooseParser(GetDomen(source)).ParseLink(link);
+                    if (Program.articleList != null && Program.articleList.Capacity > 0)
+                        return "Статьи извлечены в количестве " + Program.articleList.Count;
+                }
+                else
+                {
+                    return "Неизвестный сайт";
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Console.WriteLine(ex.StackTrace);
+            }
+            return "Не удалось извлечь статью";
+        }
+        public ParserBase ChooseParser(string domen)
+        {
+            if (LastUsedParser != null && domen == LastUsedParser.SiteDomen)
+                return LastUsedParser;
+            _knownSites.TryGetValue(domen,out LastUsedParser);
+            return LastUsedParser;
         }
 
-        public static IacisArticle ParseHtml(HtmlDocument doc)
+        private bool IsLinkOk(string link)
         {
-            return null;
-        }
-
-        public static bool JustDoIt(string link)
-        {
+            if (Regex.IsMatch(link, @"^http\w?://"))
+                return IsSiteKnown(link);
+            else if (Regex.IsMatch(link, @"^\w:\\"))
+                return IsFileSourceKnown(link);
             return false;
         }
-
-        public static bool IsSiteKnown(string link)
+        public bool IsSiteKnown(string link)
         {
-            link.Remove(0, link.IndexOf('/') + 2);
-            link.Remove(link.IndexOf('/'));
-            if (link.StartsWith("www."))
-                link.Remove(0, 4);
-
-            if (_knownSitses.Contains(link))
-                    return true;
+            link = GetDomen(link);
+            if (_knownSites.ContainsKey(link))
+                return true;
             return false;
         }
-
-        public static bool IsFileSourceKnown(string link)
+        public bool IsFileSourceKnown(string link)
         {
             HtmlDocument doc = new HtmlDocument();
             doc.Load(link);
-            if(Regex.IsMatch(doc.DocumentNode.ChildNodes[2].InnerText, pattern))
+            if (Regex.IsMatch(doc.DocumentNode.ChildNodes[2].InnerText, pattern))
             {
                 link = doc.DocumentNode.ChildNodes[2].InnerText;
-                link = link.Remove(0, link.IndexOf('/') + 2);
-                link = link.Remove(link.IndexOf('/'));
-                if (link.StartsWith("www."))
-                    link = link.Remove(0, 4);
-
-                if (_knownSitses.Contains(link))
+                link = GetDomen(link);
+                if (_knownSites.ContainsKey(link))
                     return true;
             }
             return false;
         }
 
-        public static string GetHtmlString(string url)
+        public static string GetDomen(string link)
         {
-            WebRequest request = WebRequest.Create(url);
-            WebResponse response;
-            request.Proxy = null;
-            response = request.GetResponse();
-            using (StreamReader sReader = new StreamReader(response.GetResponseStream(), Program.encode))
+            link = link.Remove(0, link.IndexOf('/') + 2);
+            link = link.Remove(link.IndexOf('/'));
+            if (link.StartsWith("www."))
+                link = link.Remove(0, 4);
+            return link;
+        }
+        public static string GetFileSourceLink(string link)
+        {
+            HtmlDocument doc = new HtmlDocument();
+            doc.Load(link);
+            if (Regex.IsMatch(doc.DocumentNode.ChildNodes[2].InnerText, pattern))
             {
-                return sReader.ReadToEnd();
+                link = doc.DocumentNode.ChildNodes[2].InnerText;
+                link = link.Remove(0, link.IndexOf('/') -5);
+                link = link.Remove(link.LastIndexOf('/')+1);
+                return link;
+            }
+            return null;
+        }
+
+        public static void ToXml(Stream а)
+        {
+            foreach (ArticleBase article in Program.articleList)
+            {
+                XmlSerializer serializer = new XmlSerializer(article.GetType());
+                serializer.Serialize(а, article);
             }
         }
-
-        public static void toXml()
-        {
-            
-        }
-
     }
 }

@@ -5,19 +5,13 @@ namespace HtmlParser.Parsers
 {
     public abstract class ParserBase
     {
-        private string _siteDomen;
-        private string _newsMainPage;
+        public string SiteDomen;
+        protected string _newsMainPage;
 
-        public abstract List<string> GetArticlesLinks(HtmlDocument doc);
+        protected abstract List<string> GetArticlesLinks(HtmlDocument doc);
 
-        public abstract IacisArticle ParseHtml(HtmlDocument doc);
+        protected abstract ArticleBase ParseArticle(HtmlDocument doc);
 
-
-        public abstract void SerializeToXml(List<ArticleBase> jobList);
-
-        public string SiteDomen
-        {
-            get { return _siteDomen; }
-        }
+        public abstract List<ArticleBase> ParseLink(string link);
     }
 }

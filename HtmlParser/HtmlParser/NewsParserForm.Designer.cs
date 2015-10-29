@@ -69,10 +69,8 @@
             this.StatusLabel.AutoSize = true;
             this.StatusLabel.Location = new System.Drawing.Point(15, 52);
             this.StatusLabel.Name = "StatusLabel";
-            this.StatusLabel.Size = new System.Drawing.Size(19, 13);
+            this.StatusLabel.Size = new System.Drawing.Size(0, 13);
             this.StatusLabel.TabIndex = 3;
-            this.StatusLabel.Text = "<>";
-            this.StatusLabel.Visible = false;
             // 
             // toXmlButton
             // 
@@ -83,7 +81,7 @@
             this.toXmlButton.Text = "toXML";
             this.toXmlButton.UseVisualStyleBackColor = true;
             this.toXmlButton.Visible = false;
-            this.toXmlButton.Click += new System.EventHandler(this.toXmlButton_Click);
+            this.toXmlButton.Click += new System.EventHandler(this.ToXmlButton_Click);
             // 
             // NewsParserForm
             // 

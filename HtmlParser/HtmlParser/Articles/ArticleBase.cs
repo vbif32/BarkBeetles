@@ -1,10 +1,13 @@
-﻿namespace HtmlParser
+﻿using System;
+
+namespace HtmlParser
 {
+    [Serializable]
     public abstract class ArticleBase
     {
-        private string _title;
-        private string _text;
-        private string _link;
+        protected string _title;
+        protected string _text;
+        protected string _link;
         public string Title
         {
             get

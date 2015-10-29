@@ -2,11 +2,17 @@
 using System.Windows.Forms;
 using HtmlParser.Parsers;
 using System.Text.RegularExpressions;
+using System.IO;
+using System.Xml.Serialization;
 
 namespace HtmlParser
 {
     public partial class NewsParserForm : Form
     {
+        private static string _netPathPattern = @"^http\w?://";
+        private static string _localPathPattern = @"^\w:\\";
+
+
         public NewsParserForm()
         {
             InitializeComponent();
@@ -16,18 +22,10 @@ namespace HtmlParser
         {
             if(e.KeyCode == Keys.Enter)
             {
-                if (looksLikeTruth(PathTextBox.Text))
+                if (LooksLikeTruth(PathTextBox.Text))
                 {
-                    if (isLinkOk(PathTextBox.Text))
-                    {
-                        StatusLabel.Text = "Известный источник";
-                        ParserManager.JustDoIt(PathTextBox.Text);
-                        toXmlButton.Visible = true;
-                    }
-                    else
-                    {
-                        StatusLabel.Text = "Ссылка неправильная";
-                    }
+                    UpdateStatusLabel = Program.parserManager.TryParse(PathTextBox.Text);
+                    toXmlButton.Visible = true;
                 }
                 else
                 {
@@ -41,47 +39,44 @@ namespace HtmlParser
             OpenFileDialog openFileDialog = new OpenFileDialog();
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                if (isLinkOk(openFileDialog.FileName))
-                {
-                    StatusLabel.Text = "Известный источник";
-                    ParserManager.JustDoIt(PathTextBox.Text);
-                    toXmlButton.Visible = true;
-                }
-                else
-                { 
-                    StatusLabel.Text = "Файл не удалось распознать";
-                }  
+                UpdateStatusLabel = Program.parserManager.TryParse(openFileDialog.FileName);
+                toXmlButton.Visible = true;
             }
             else
                 StatusLabel.Text = "Ошибка при открытии файла";
         }
 
-        private void toXmlButton_Click(object sender, EventArgs e)
+        private void ToXmlButton_Click(object sender, EventArgs e)
         {
             if(Program.articleList.Count > 0)
             {
-                ParserManager.toXml();
+                SaveFileDialog saveFileDialog = new SaveFileDialog();
+                saveFileDialog.FileName = "report.xml";
+                saveFileDialog.Filter = "XML-данные|*.xml";
+                saveFileDialog.Title = "Сохранение файла";
+                if (saveFileDialog.ShowDialog() == DialogResult.OK) {
+                    ParserManager.ToXml(saveFileDialog.OpenFile());
+                    StatusLabel.Text = "XML-файл готов";
+                }
             }
             else
             {
                 StatusLabel.Text = "Нечего конвертировать";
+                toXmlButton.Visible = false;
             }
         }
 
-        private bool looksLikeTruth(string link)
+        private bool LooksLikeTruth(string link)
         {
-            if (Regex.IsMatch(link, @"^http\w?://") || Regex.IsMatch(link, @"^\w:\\"))
+            if (Regex.IsMatch(link, _netPathPattern) || Regex.IsMatch(link, _localPathPattern))
                 return true;
             return false;
         }
 
-        private bool isLinkOk(string link)
+        public string UpdateStatusLabel
         {
-            if (Regex.IsMatch(link, @"^http\w?://"))
-                return ParserManager.IsSiteKnown(link);
-            else if (Regex.IsMatch(link, @"^\w:\\"))
-                return ParserManager.IsFileSourceKnown(link);
-            return false;
+            set { StatusLabel.Text = value; }
         }
+
     }
 }
