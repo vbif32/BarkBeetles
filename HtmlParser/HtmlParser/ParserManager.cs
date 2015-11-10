@@ -1,9 +1,10 @@
 ﻿using HtmlAgilityPack;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
+
+using System.Linq;
 
 namespace HtmlParser.Parsers
 {
@@ -24,7 +25,7 @@ namespace HtmlParser.Parsers
                 {
                     string source = link.StartsWith("http") ? link : GetFileSourceLink(link);
                     Program.articleList = ChooseParser(GetDomen(source)).ParseLink(link);
-                    if (Program.articleList != null && Program.articleList.Capacity > 0)
+                    if (Program.articleList != null && Program.articleList.Count > 0)
                         return "Статьи извлечены в количестве " + Program.articleList.Count;
                 }
                 else
@@ -34,7 +35,7 @@ namespace HtmlParser.Parsers
             }
             catch (System.Exception ex)
             {
-                Console.WriteLine(ex.StackTrace);
+                return "Ошибка при извлечении статьи";
             }
             return "Не удалось извлечь статью";
         }
@@ -105,5 +106,15 @@ namespace HtmlParser.Parsers
                 serializer.Serialize(а, article);
             }
         }
+        public static void ToDatabase()
+        {
+            var articleCollection = Program.mongoDb.GetCollection("articles");
+            foreach (ArticleBase article in Program.articleList)
+            {
+                articleCollection.Insert(article.toBson());
+            }
+            var test = new IacisArticle( articleCollection.FindAll().Last());
+        }
+
     }
 }

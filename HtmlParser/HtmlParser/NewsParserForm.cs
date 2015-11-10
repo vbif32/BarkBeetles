@@ -2,8 +2,8 @@
 using System.Windows.Forms;
 using HtmlParser.Parsers;
 using System.Text.RegularExpressions;
-using System.IO;
-using System.Xml.Serialization;
+using MongoDB.Driver;
+using MongoDB.Bson;
 
 namespace HtmlParser
 {
@@ -11,6 +11,7 @@ namespace HtmlParser
     {
         private static string _netPathPattern = @"^http\w?://";
         private static string _localPathPattern = @"^\w:\\";
+        private static string connectionString = "mongodb://localhost";
 
 
         public NewsParserForm()
@@ -24,8 +25,9 @@ namespace HtmlParser
             {
                 if (LooksLikeTruth(PathTextBox.Text))
                 {
-                    UpdateStatusLabel = Program.parserManager.TryParse(PathTextBox.Text);
+                    StatusLabel.Text = Program.parserManager.TryParse(PathTextBox.Text);
                     toXmlButton.Visible = true;
+                    DBSearchButton.Visible = true;
                 }
                 else
                 {
@@ -39,8 +41,9 @@ namespace HtmlParser
             OpenFileDialog openFileDialog = new OpenFileDialog();
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                UpdateStatusLabel = Program.parserManager.TryParse(openFileDialog.FileName);
+                StatusLabel.Text = Program.parserManager.TryParse(openFileDialog.FileName);
                 toXmlButton.Visible = true;
+                DBSearchButton.Visible = true;
             }
             else
                 StatusLabel.Text = "Ошибка при открытии файла";
@@ -48,13 +51,14 @@ namespace HtmlParser
 
         private void ToXmlButton_Click(object sender, EventArgs e)
         {
-            if(Program.articleList.Count > 0)
+            if (Program.articleList.Count > 0)
             {
                 SaveFileDialog saveFileDialog = new SaveFileDialog();
                 saveFileDialog.FileName = "report.xml";
                 saveFileDialog.Filter = "XML-данные|*.xml";
                 saveFileDialog.Title = "Сохранение файла";
-                if (saveFileDialog.ShowDialog() == DialogResult.OK) {
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
                     ParserManager.ToXml(saveFileDialog.OpenFile());
                     StatusLabel.Text = "XML-файл готов";
                 }
@@ -63,7 +67,37 @@ namespace HtmlParser
             {
                 StatusLabel.Text = "Нечего конвертировать";
                 toXmlButton.Visible = false;
+                DBSearchButton.Visible = false;
             }
+        }
+
+        private void toDatabaseButton_Click(object sender, EventArgs e)
+        {
+            if (Program.articleList.Count > 0)
+            {
+                try
+                {
+                    Program.mongoClient = new MongoClient(connectionString);
+                    Program.mongoDb = Program.mongoClient.GetServer().GetDatabase("iacis");
+                    ParserManager.ToDatabase();
+                    StatusLabel.Text = "Статьи помещены в базу в количестве " + Program.articleList.Count;
+                }
+                catch
+                {
+                    StatusLabel.Text = "Ошибка соединения с БД";
+                }
+            }
+            else
+            {
+                StatusLabel.Text = "Нечего конвертировать";
+                toXmlButton.Visible = false;
+                DBSearchButton.Visible = false;
+            }
+        }
+
+        private void DBSearchButton_Click(object sender, EventArgs e)
+        {
+
         }
 
         private bool LooksLikeTruth(string link)
@@ -71,11 +105,6 @@ namespace HtmlParser
             if (Regex.IsMatch(link, _netPathPattern) || Regex.IsMatch(link, _localPathPattern))
                 return true;
             return false;
-        }
-
-        public string UpdateStatusLabel
-        {
-            set { StatusLabel.Text = value; }
         }
 
     }

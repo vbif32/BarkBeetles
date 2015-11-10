@@ -77,18 +77,29 @@ namespace HtmlParser
             if (galleryHolder != null)
             {
 	            var ImageWithCaption = galleryHolder.ChildNodes.Where(x => x.Name != "#text");
-	            if (galleryHolder.Id != "slides")
+                string imagePath;
+                if (galleryHolder.Id != "slides")
 	            {
 	                imageCaption = ImageWithCaption.Last().Element("div").Element("em").InnerText;
-	                imagesList.Add("http://" + SiteDomen + ImageWithCaption.First().Element("li").Element("img").Attributes[0].Value);
-	            }
+                    string src = ImageWithCaption.First().Element("li").Element("img").GetAttributeValue("src", "notFound");
+                    if (src.StartsWith("."))
+                        imagePath = Path.GetFullPath(_currentArticleSource + src.Substring(1));
+                    else
+                        imagePath = "http://" + SiteDomen + src;
+                    imagesList.Add(imagePath);
+                }
 	            else
 	            {
 	                imageCaption = ImageWithCaption.First().Element("li").Element("a").Element("img").Attributes[1].Value;
 	                var images = ImageWithCaption.First().ChildNodes.Where(x => x.Name == "li");
 	                foreach (HtmlNode image in images)
 	                {
-	                    imagesList.Add("http://" + SiteDomen + image.Element("a").Element("img").Attributes[0].Value);
+                        string src = image.Element("li").Element("img").GetAttributeValue("src", "notFound");
+                        if (src.StartsWith("."))
+                            imagePath = Path.GetFullPath(_currentArticleSource + src.Substring(1));
+                        else
+                            imagePath = "http://" + SiteDomen + src;
+                        imagesList.Add(imagePath);
 	                }
 	            }
             }
@@ -96,32 +107,33 @@ namespace HtmlParser
             return article;
         }
 
-        public override List<ArticleBase> ParseLink(string link)
+        public override List<ArticleBase> ParseLink(string source)
         {
             HtmlDocument doc = new HtmlDocument();
             List<ArticleBase> articleList = new List<ArticleBase>();
-            string articleSource;
+            string link;
+            _currentArticleSource = source.Replace('\\', '/');
 
             List<string> newArticlesLinks;
             IacisArticle newArticle;
 
-            if (link.StartsWith("http"))
+            if (source.StartsWith("http"))
             {
-                doc.LoadHtml(Program.wClient.DownloadString(link));
-                articleSource = link;
+                doc.LoadHtml(Program.wClient.DownloadString(source));
+                link = source;
             }
             else
             {
-                doc.Load(link, Program.encode);
-                articleSource = ParserManager.GetFileSourceLink(link);
+                doc.Load(source, Program.encode);
+                link = ParserManager.GetFileSourceLink(source);
             }
 
-            if (articleSource.Contains(_newsMainPage))
+            if (link.Contains(_newsMainPage))
             {
-	            if (articleSource.Split('/').Length > 6)
+	            if (link.Split('/').Length > 6)
 	            {
 	                newArticle = (IacisArticle)ParseArticle(doc);
-	                newArticle.Link = articleSource;
+	                newArticle.Link = link;
 	                articleList.Add(newArticle);
 	            }
 	            else

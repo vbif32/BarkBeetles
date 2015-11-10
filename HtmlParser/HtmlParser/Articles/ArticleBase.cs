@@ -1,45 +1,28 @@
-﻿using System;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
+using MongoDB.Driver;
+using System;
 
 namespace HtmlParser
 {
     [Serializable]
     public abstract class ArticleBase
     {
-        protected string _title;
-        protected string _text;
-        protected string _link;
-        public string Title
+        [NonSerialized] [BsonId]
+        protected ObjectId _mongoId;
+
+        protected ArticleBase()
         {
-            get
-            {
-                return _title;
-            }
-            set
-            {
-                _title = value;
-            }
+            _mongoId = ObjectId.GenerateNewId();
         }
-        public string Text
+        public ArticleBase(BsonDocument doc)
         {
-            get
-            {
-                return _text;
-            }
-            set
-            {
-                _text = value;
-            }
+
         }
-        public string Link
-        {
-            get
-            {
-                return _link;
-            }
-            set
-            {
-                _link = value;
-            }
-        }
+        public string Title { get; set; }
+
+        public string Text { get; set; }
+        public string Link { get; set; }
+        public abstract BsonDocument toBson();
     }
 }

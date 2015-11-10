@@ -1,4 +1,5 @@
 ﻿using HtmlParser.Parsers;
+using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -23,6 +24,8 @@ namespace HtmlParser
         public static ParserManager parserManager;
         public static WebClient wClient;
         public static Encoding encode = Encoding.GetEncoding("utf-8");
+        public static MongoClient mongoClient;
+        public static MongoDatabase mongoDb;
 
         [STAThread]
         static void Main(string[] args)
