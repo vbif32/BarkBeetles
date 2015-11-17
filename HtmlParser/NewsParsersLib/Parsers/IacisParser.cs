@@ -2,10 +2,9 @@
 using System.Linq;
 using HtmlAgilityPack;
 using System.IO;
-using System.Xml.Serialization;
-using HtmlParser.Parsers;
+using NewsParsersLib.Articles;
 
-namespace HtmlParser
+namespace NewsParsersLib.Parsers
 {
     public class IacisParser : ParserBase
     {
@@ -40,7 +39,6 @@ namespace HtmlParser
             }
             return articleLinkList;
         }
-
         protected override ArticleBase ParseArticle(HtmlDocument doc)
         {
             IacisArticle article;
@@ -106,7 +104,6 @@ namespace HtmlParser
             article = new IacisArticle(title, text, author, date, imageCaption, imagesList);
             return article;
         }
-
         public override List<ArticleBase> ParseLink(string source)
         {
             HtmlDocument doc = new HtmlDocument();
@@ -119,12 +116,12 @@ namespace HtmlParser
 
             if (source.StartsWith("http"))
             {
-                doc.LoadHtml(Program.wClient.DownloadString(source));
+                doc.LoadHtml(ParserManager.WClient.DownloadString(source));
                 link = source;
             }
             else
             {
-                doc.Load(source, Program.encode);
+                doc.Load(source, ParserManager.Encode);
                 link = ParserManager.GetFileSourceLink(source);
             }
 
@@ -141,7 +138,7 @@ namespace HtmlParser
 	                newArticlesLinks = GetArticlesLinks(doc);
 	                foreach(string newLink in newArticlesLinks)
 	                {
-	                    doc.LoadHtml(Program.wClient.DownloadString(newLink));
+	                    doc.LoadHtml(ParserManager.WClient.DownloadString(newLink));
 	                    newArticle = (IacisArticle)ParseArticle(doc);
 	                    newArticle.Link = newLink;
 	                    articleList.Add(newArticle);

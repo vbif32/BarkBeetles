@@ -3,7 +3,7 @@ using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
 using System;
 
-namespace HtmlParser
+namespace NewsParsersLib.Articles
 {
     [Serializable]
     public abstract class ArticleBase

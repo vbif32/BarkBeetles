@@ -6,8 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net;
 
-namespace HtmlParser
+namespace NewsParsersLib.Articles
 {
     [Serializable]
     public class IacisArticle : ArticleBase
@@ -47,7 +48,7 @@ namespace HtmlParser
             foreach (var imageId in doc.GetValue("images").AsBsonArray)
             {
                 int i = 0;
-                MongoGridFSFileInfo file = Program.mongoDb.GridFS.FindOne(Query.EQ("_id", imageId));
+                MongoGridFSFileInfo file = ParserManager.MongoDb.GridFS.FindOne(Query.EQ("_id", imageId));
                 using (MongoGridFSStream stream = file.OpenRead())
                 {
                     var bytes = new byte[stream.Length];
@@ -77,34 +78,42 @@ namespace HtmlParser
                 { "dateOfPublication", DateOfPublication },
                 { "imageCaption", ImageCaption },
             };
+            if (Images.Count != 0)
+            {
+                newDoc.Add("images", uploadImagesToDb());
+            }
+            else
+                newDoc.Add("images", null);
+            return newDoc;
+        }
+
+        delegate Stream streamDelegate(string s);
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
+        public BsonArray uploadImagesToDb()
+        {
             BsonArray dbImages = new BsonArray();
             if (Images.Count != 0)
             {
+                streamDelegate openRead;
+                bool fromWeb = Images.First().StartsWith("http");
+
                 if (Images.First().StartsWith("http"))
-                {
-                    foreach (var image in Images)
-                    {
-                        using (var fs = Program.wClient.OpenRead(image))
-                        {
-                            MongoGridFSFileInfo gridFsInfo = Program.mongoDb.GridFS.Upload(fs, image.Substring(image.LastIndexOf('/')));
-                            dbImages.Add(gridFsInfo.Id);
-                        }
-                    }
-                }
+                    openRead = ParserManager.WClient.OpenRead;
                 else
-                {
-                    foreach (var image in Images)
+                    openRead = File.OpenRead;
+
+                foreach (var image in Images)
+                    using (var fs = openRead(image))
                     {
-                        using (var fs = File.OpenRead(image))
-                        {
-                            MongoGridFSFileInfo gridFsInfo = Program.mongoDb.GridFS.Upload(fs, image.Substring(image.LastIndexOf('/')));
-                            dbImages.Add(gridFsInfo.Id);
-                        }
+                        MongoGridFSFileInfo gridFsInfo = ParserManager.MongoDb.GridFS.Upload(fs, image.Substring(image.LastIndexOf('/')));
+                        dbImages.Add(gridFsInfo.Id);
                     }
-                }
             }
-            newDoc.Add("images", dbImages);
-            return newDoc;
+            
+            return dbImages;
         }
     }
 }

@@ -76,18 +76,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Articles\IacisArticle.cs" />
-    <Compile Include="SearchManager.cs" />
-    <Compile Include="Parsers\IacisParser.cs" />
-    <Compile Include="Articles\ArticleBase.cs" />
     <Compile Include="NewsParserForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="NewsParserForm.Designer.cs">
       <DependentUpon>NewsParserForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ParserManager.cs" />
-    <Compile Include="Parsers\ParserBase.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="NewsParserForm.resx">
@@ -129,7 +123,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="lib\" />
+    <ProjectReference Include="..\NewsParsersLib\NewsParsersLib.csproj">
+      <Project>{446e2bc7-e49f-4d70-85f2-3e456a9ecfb7}</Project>
+      <Name>NewsParsersLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

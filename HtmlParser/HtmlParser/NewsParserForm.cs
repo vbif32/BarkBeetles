@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Windows.Forms;
-using HtmlParser.Parsers;
 using System.Text.RegularExpressions;
-using MongoDB.Driver;
-using MongoDB.Bson;
 
 namespace HtmlParser
 {
@@ -11,7 +8,7 @@ namespace HtmlParser
     {
         private static string _netPathPattern = @"^http\w?://";
         private static string _localPathPattern = @"^\w:\\";
-        private static string connectionString = "mongodb://localhost";
+
 
 
         public NewsParserForm()
@@ -51,7 +48,7 @@ namespace HtmlParser
 
         private void ToXmlButton_Click(object sender, EventArgs e)
         {
-            if (Program.articleList.Count > 0)
+            if (Program.parserManager.ArticleList.Count > 0)
             {
                 SaveFileDialog saveFileDialog = new SaveFileDialog();
                 saveFileDialog.FileName = "report.xml";
@@ -59,7 +56,7 @@ namespace HtmlParser
                 saveFileDialog.Title = "Сохранение файла";
                 if (saveFileDialog.ShowDialog() == DialogResult.OK)
                 {
-                    ParserManager.ToXml(saveFileDialog.OpenFile());
+                    Program.parserManager.ToXml(saveFileDialog.OpenFile());
                     StatusLabel.Text = "XML-файл готов";
                 }
             }
@@ -73,14 +70,13 @@ namespace HtmlParser
 
         private void toDatabaseButton_Click(object sender, EventArgs e)
         {
-            if (Program.articleList.Count > 0)
+            if (Program.parserManager.ArticleList.Count > 0)
             {
                 try
                 {
-                    Program.mongoClient = new MongoClient(connectionString);
-                    Program.mongoDb = Program.mongoClient.GetServer().GetDatabase("iacis");
-                    ParserManager.ToDatabase();
-                    StatusLabel.Text = "Статьи помещены в базу в количестве " + Program.articleList.Count;
+
+                    Program.parserManager.ToDatabase();
+                    StatusLabel.Text = "Статьи помещены в базу в количестве " + Program.parserManager.ArticleList.Count;
                 }
                 catch
                 {

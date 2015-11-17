@@ -3,19 +3,35 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
-
 using System.Linq;
+using NewsParsersLib.Parsers;
+using NewsParsersLib.Articles;
+using MongoDB.Driver;
+using System.Text;
+using System.Net;
 
-namespace HtmlParser.Parsers
+namespace NewsParsersLib
 {
     public class ParserManager
     {
+        public List<ArticleBase> ArticleList { get; private set; }
+        public static WebClient WClient { get; set; }
+        public static Encoding Encode { get; set; }
+        public static MongoDatabase MongoDb { get; set; }
+
         private const string pattern = @"<!-- saved from url=.*-->$";
         private ParserBase LastUsedParser;
         private Dictionary<string, ParserBase> _knownSites = new Dictionary<string, ParserBase>
         {
             { IacisParser.SiteDomen, new IacisParser() }
         };
+
+        public ParserManager(WebClient wClient, Encoding encode, MongoDatabase db)
+        {
+            WClient = wClient;
+            Encode = encode;
+            MongoDb = db;
+        }
 
         public string TryParse(string link)
         {
@@ -24,16 +40,16 @@ namespace HtmlParser.Parsers
                 if (IsLinkOk(link))
                 {
                     string source = link.StartsWith("http") ? link : GetFileSourceLink(link);
-                    Program.articleList = ChooseParser(GetDomen(source)).ParseLink(link);
-                    if (Program.articleList != null && Program.articleList.Count > 0)
-                        return "Статьи извлечены в количестве " + Program.articleList.Count;
+                    ArticleList = ChooseParser(GetDomen(source)).ParseLink(link);
+                    if (ArticleList != null && ArticleList.Count > 0)
+                        return "Статьи извлечены в количестве " + ArticleList.Count;
                 }
                 else
                 {
                     return "Неизвестный сайт";
                 }
             }
-            catch (System.Exception ex)
+            catch (System.Exception)
             {
                 return "Ошибка при извлечении статьи";
             }
@@ -98,18 +114,18 @@ namespace HtmlParser.Parsers
             return null;
         }
 
-        public static void ToXml(Stream а)
+        public void ToXml(Stream а)
         {
-            foreach (ArticleBase article in Program.articleList)
+            foreach (ArticleBase article in ArticleList)
             {
                 XmlSerializer serializer = new XmlSerializer(article.GetType());
                 serializer.Serialize(а, article);
             }
         }
-        public static void ToDatabase()
+        public void ToDatabase()
         {
-            var articleCollection = Program.mongoDb.GetCollection("articles");
-            foreach (ArticleBase article in Program.articleList)
+            var articleCollection = MongoDb.GetCollection("articles");
+            foreach (ArticleBase article in ArticleList)
             {
                 articleCollection.Insert(article.toBson());
             }

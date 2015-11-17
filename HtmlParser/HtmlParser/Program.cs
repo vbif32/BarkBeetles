@@ -1,9 +1,8 @@
-﻿using HtmlParser.Parsers;
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
 using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Text;
+using NewsParsersLib;
 
 /**
 Программу написал Федин Михаил из группы ИКБО-02-14.
@@ -20,12 +19,12 @@ namespace HtmlParser
 {
     static class Program
     {
-        public static List<ArticleBase> articleList;
         public static ParserManager parserManager;
         public static WebClient wClient;
         public static Encoding encode = Encoding.GetEncoding("utf-8");
         public static MongoClient mongoClient;
         public static MongoDatabase mongoDb;
+        private static string mongoConnectionString = "mongodb://localhost";
 
         [STAThread]
         static void Main(string[] args)
@@ -33,7 +32,9 @@ namespace HtmlParser
             wClient = new WebClient();
             wClient.Proxy = null;
             wClient.Encoding = encode;
-            parserManager = new ParserManager();
+            mongoClient = new MongoClient(mongoConnectionString);
+            mongoDb = mongoClient.GetServer().GetDatabase("iacis");
+            parserManager = new ParserManager(wClient, encode, mongoDb);
 
             System.Windows.Forms.Application.EnableVisualStyles();
             System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);

@@ -1,5 +1,5 @@
 ﻿
-namespace HtmlParser.Parsers
+namespace NewsParsersLib
 {
     public class SearchManager
     {
