@@ -101,7 +101,7 @@ namespace NewsParsersLib.Articles
                 bool fromWeb = Images.First().StartsWith("http");
 
                 if (Images.First().StartsWith("http"))
-                    openRead = ParserManager.WClient.OpenRead;
+                    openRead = new WebClient().OpenRead;
                 else
                     openRead = File.OpenRead;
 

@@ -1,4 +1,6 @@
-﻿namespace HtmlParser
+﻿using System;
+
+namespace HtmlParser
 {
     partial class NewsParserForm
     {
@@ -30,18 +32,25 @@
         {
             System.Windows.Forms.Label InstructionLabel;
             System.Windows.Forms.Label SearchInstructionLabel;
+            System.Windows.Forms.Label LookForLabel;
+            System.Windows.Forms.Label FoundLabel;
             this.PathTextBox = new System.Windows.Forms.TextBox();
             this.OpenFileButton = new System.Windows.Forms.Button();
             this.StatusLabel = new System.Windows.Forms.Label();
             this.toXmlButton = new System.Windows.Forms.Button();
-            this.DBSearchButton = new System.Windows.Forms.Button();
             this.ToDatabaseButton = new System.Windows.Forms.Button();
+            this.DBSearchButton = new System.Windows.Forms.Button();
             this.SearchTextBox = new System.Windows.Forms.TextBox();
             this.TitleCheckBox = new System.Windows.Forms.CheckBox();
             this.TextCheckBox = new System.Windows.Forms.CheckBox();
             this.DateCheckBox = new System.Windows.Forms.CheckBox();
+            this.TitleResultsLabel = new System.Windows.Forms.Label();
+            this.TextResultsLabel = new System.Windows.Forms.Label();
+            this.DateResultsLabel = new System.Windows.Forms.Label();
             InstructionLabel = new System.Windows.Forms.Label();
             SearchInstructionLabel = new System.Windows.Forms.Label();
+            LookForLabel = new System.Windows.Forms.Label();
+            FoundLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // InstructionLabel
@@ -101,17 +110,6 @@
             this.toXmlButton.Visible = false;
             this.toXmlButton.Click += new System.EventHandler(this.ToXmlButton_Click);
             // 
-            // DBSearchButton
-            // 
-            this.DBSearchButton.Location = new System.Drawing.Point(346, 97);
-            this.DBSearchButton.Name = "DBSearchButton";
-            this.DBSearchButton.Size = new System.Drawing.Size(75, 23);
-            this.DBSearchButton.TabIndex = 5;
-            this.DBSearchButton.Text = "Поиск";
-            this.DBSearchButton.UseVisualStyleBackColor = true;
-            this.DBSearchButton.Visible = false;
-            this.DBSearchButton.Click += new System.EventHandler(this.DBSearchButton_Click);
-            // 
             // ToDatabaseButton
             // 
             this.ToDatabaseButton.Location = new System.Drawing.Point(265, 51);
@@ -121,6 +119,17 @@
             this.ToDatabaseButton.Text = "to Database";
             this.ToDatabaseButton.UseVisualStyleBackColor = true;
             this.ToDatabaseButton.Visible = false;
+            this.ToDatabaseButton.Click += new System.EventHandler(this.ToDatabaseButton_Click);
+            // 
+            // DBSearchButton
+            // 
+            this.DBSearchButton.Location = new System.Drawing.Point(346, 97);
+            this.DBSearchButton.Name = "DBSearchButton";
+            this.DBSearchButton.Size = new System.Drawing.Size(75, 23);
+            this.DBSearchButton.TabIndex = 5;
+            this.DBSearchButton.Text = "Поиск";
+            this.DBSearchButton.UseVisualStyleBackColor = true;
+            this.DBSearchButton.Click += new System.EventHandler(this.DBSearchButton_Click);
             // 
             // SearchTextBox
             // 
@@ -132,7 +141,7 @@
             // TitleCheckBox
             // 
             this.TitleCheckBox.AutoSize = true;
-            this.TitleCheckBox.Location = new System.Drawing.Point(15, 127);
+            this.TitleCheckBox.Location = new System.Drawing.Point(15, 139);
             this.TitleCheckBox.Name = "TitleCheckBox";
             this.TitleCheckBox.Size = new System.Drawing.Size(80, 17);
             this.TitleCheckBox.TabIndex = 9;
@@ -142,7 +151,7 @@
             // TextCheckBox
             // 
             this.TextCheckBox.AutoSize = true;
-            this.TextCheckBox.Location = new System.Drawing.Point(101, 127);
+            this.TextCheckBox.Location = new System.Drawing.Point(15, 162);
             this.TextCheckBox.Name = "TextCheckBox";
             this.TextCheckBox.Size = new System.Drawing.Size(56, 17);
             this.TextCheckBox.TabIndex = 10;
@@ -152,18 +161,65 @@
             // DateCheckBox
             // 
             this.DateCheckBox.AutoSize = true;
-            this.DateCheckBox.Location = new System.Drawing.Point(163, 127);
+            this.DateCheckBox.Location = new System.Drawing.Point(15, 185);
             this.DateCheckBox.Name = "DateCheckBox";
             this.DateCheckBox.Size = new System.Drawing.Size(52, 17);
             this.DateCheckBox.TabIndex = 11;
             this.DateCheckBox.Text = "Дата";
             this.DateCheckBox.UseVisualStyleBackColor = true;
             // 
+            // LookForLabel
+            // 
+            LookForLabel.AutoSize = true;
+            LookForLabel.Location = new System.Drawing.Point(12, 123);
+            LookForLabel.Name = "LookForLabel";
+            LookForLabel.Size = new System.Drawing.Size(44, 13);
+            LookForLabel.TabIndex = 12;
+            LookForLabel.Text = "Искать";
+            // 
+            // FoundLabel
+            // 
+            FoundLabel.AutoSize = true;
+            FoundLabel.Location = new System.Drawing.Point(101, 123);
+            FoundLabel.Name = "FoundLabel";
+            FoundLabel.Size = new System.Drawing.Size(51, 13);
+            FoundLabel.TabIndex = 13;
+            FoundLabel.Text = "Найдено";
+            // 
+            // TitleResultsLabel
+            // 
+            this.TitleResultsLabel.AutoSize = true;
+            this.TitleResultsLabel.Location = new System.Drawing.Point(101, 143);
+            this.TitleResultsLabel.Name = "TitleResultsLabel";
+            this.TitleResultsLabel.Size = new System.Drawing.Size(0, 13);
+            this.TitleResultsLabel.TabIndex = 14;
+            // 
+            // TextResultsLabel
+            // 
+            this.TextResultsLabel.AutoSize = true;
+            this.TextResultsLabel.Location = new System.Drawing.Point(101, 166);
+            this.TextResultsLabel.Name = "TextResultsLabel";
+            this.TextResultsLabel.Size = new System.Drawing.Size(0, 13);
+            this.TextResultsLabel.TabIndex = 15;
+            // 
+            // DateResultsLabel
+            // 
+            this.DateResultsLabel.AutoSize = true;
+            this.DateResultsLabel.Location = new System.Drawing.Point(101, 189);
+            this.DateResultsLabel.Name = "DateResultsLabel";
+            this.DateResultsLabel.Size = new System.Drawing.Size(0, 13);
+            this.DateResultsLabel.TabIndex = 16;
+            // 
             // NewsParserForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(434, 156);
+            this.ClientSize = new System.Drawing.Size(434, 221);
+            this.Controls.Add(this.DateResultsLabel);
+            this.Controls.Add(this.TextResultsLabel);
+            this.Controls.Add(this.TitleResultsLabel);
+            this.Controls.Add(FoundLabel);
+            this.Controls.Add(LookForLabel);
             this.Controls.Add(this.DateCheckBox);
             this.Controls.Add(this.TextCheckBox);
             this.Controls.Add(this.TitleCheckBox);
@@ -194,6 +250,9 @@
         private System.Windows.Forms.CheckBox TitleCheckBox;
         private System.Windows.Forms.CheckBox TextCheckBox;
         private System.Windows.Forms.CheckBox DateCheckBox;
+        private System.Windows.Forms.Label TitleResultsLabel;
+        private System.Windows.Forms.Label TextResultsLabel;
+        private System.Windows.Forms.Label DateResultsLabel;
     }
 }
 

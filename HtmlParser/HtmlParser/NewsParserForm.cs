@@ -24,7 +24,7 @@ namespace HtmlParser
                 {
                     StatusLabel.Text = Program.parserManager.TryParse(PathTextBox.Text);
                     toXmlButton.Visible = true;
-                    DBSearchButton.Visible = true;
+                    ToDatabaseButton.Visible = true;
                 }
                 else
                 {
@@ -40,7 +40,7 @@ namespace HtmlParser
             {
                 StatusLabel.Text = Program.parserManager.TryParse(openFileDialog.FileName);
                 toXmlButton.Visible = true;
-                DBSearchButton.Visible = true;
+                ToDatabaseButton.Visible = true;
             }
             else
                 StatusLabel.Text = "Ошибка при открытии файла";
@@ -64,17 +64,16 @@ namespace HtmlParser
             {
                 StatusLabel.Text = "Нечего конвертировать";
                 toXmlButton.Visible = false;
-                DBSearchButton.Visible = false;
+                ToDatabaseButton.Visible = false;
             }
         }
 
-        private void toDatabaseButton_Click(object sender, EventArgs e)
+        private void ToDatabaseButton_Click(object sender, EventArgs e)
         {
             if (Program.parserManager.ArticleList.Count > 0)
             {
                 try
                 {
-
                     Program.parserManager.ToDatabase();
                     StatusLabel.Text = "Статьи помещены в базу в количестве " + Program.parserManager.ArticleList.Count;
                 }
@@ -87,13 +86,31 @@ namespace HtmlParser
             {
                 StatusLabel.Text = "Нечего конвертировать";
                 toXmlButton.Visible = false;
-                DBSearchButton.Visible = false;
+                ToDatabaseButton.Visible = false;
             }
         }
 
         private void DBSearchButton_Click(object sender, EventArgs e)
         {
+            if(SearchTextBox.Text.Length > 0)
+            {
+                if (TitleCheckBox.Checked)
+                {
+                    StatusLabel.Text = "Найдено " + Program.searchManager.TitleSearch(SearchTextBox.Text);
+                }
+                if (TextCheckBox.Checked)
+                {
+                    StatusLabel.Text = "Найдено " + Program.searchManager.TextSearch(SearchTextBox.Text);
+                }
+                if (DateCheckBox.Checked)
+                {
 
+                }
+            }
+            else
+            {
+                StatusLabel.Text = "Введи";
+            }
         }
 
         private bool LooksLikeTruth(string link)

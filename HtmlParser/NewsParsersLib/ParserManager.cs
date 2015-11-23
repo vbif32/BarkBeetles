@@ -15,8 +15,6 @@ namespace NewsParsersLib
     public class ParserManager
     {
         public List<ArticleBase> ArticleList { get; private set; }
-        public static WebClient WClient { get; set; }
-        public static Encoding Encode { get; set; }
         public static MongoDatabase MongoDb { get; set; }
 
         private const string pattern = @"<!-- saved from url=.*-->$";
@@ -26,10 +24,8 @@ namespace NewsParsersLib
             { IacisParser.SiteDomen, new IacisParser() }
         };
 
-        public ParserManager(WebClient wClient, Encoding encode, MongoDatabase db)
+        public ParserManager(MongoDatabase db)
         {
-            WClient = wClient;
-            Encode = encode;
             MongoDb = db;
         }
 

@@ -16,6 +16,7 @@ namespace HtmlParser
     static class Program
     {
         public static ParserManager parserManager;
+        public static SearchManager searchManager;
         public static WebClient wClient;
         public static Encoding encode = Encoding.GetEncoding("utf-8");
         public static MongoClient mongoClient;
@@ -30,7 +31,8 @@ namespace HtmlParser
             wClient.Encoding = encode;
             mongoClient = new MongoClient(mongoConnectionString);
             mongoDb = mongoClient.GetServer().GetDatabase("iacis");
-            parserManager = new ParserManager(wClient, encode, mongoDb);
+            parserManager = new ParserManager(mongoDb);
+            searchManager = new SearchManager(mongoDb);
 
             System.Windows.Forms.Application.EnableVisualStyles();
             System.Windows.Forms.Application.SetCompatibleTextRenderingDefault(false);

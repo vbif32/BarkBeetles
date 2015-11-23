@@ -3,6 +3,8 @@ using System.Linq;
 using HtmlAgilityPack;
 using System.IO;
 using NewsParsersLib.Articles;
+using System.Net;
+using System.Text;
 
 namespace NewsParsersLib.Parsers
 {
@@ -116,12 +118,12 @@ namespace NewsParsersLib.Parsers
 
             if (source.StartsWith("http"))
             {
-                doc.LoadHtml(ParserManager.WClient.DownloadString(source));
+                doc.LoadHtml(new WebClient().DownloadString(source));
                 link = source;
             }
             else
             {
-                doc.Load(source, ParserManager.Encode);
+                doc.Load(source, Encoding.GetEncoding("utf-8"));
                 link = ParserManager.GetFileSourceLink(source);
             }
 
@@ -138,7 +140,7 @@ namespace NewsParsersLib.Parsers
 	                newArticlesLinks = GetArticlesLinks(doc);
 	                foreach(string newLink in newArticlesLinks)
 	                {
-	                    doc.LoadHtml(ParserManager.WClient.DownloadString(newLink));
+	                    doc.LoadHtml(new WebClient().DownloadString(newLink));
 	                    newArticle = (IacisArticle)ParseArticle(doc);
 	                    newArticle.Link = newLink;
 	                    articleList.Add(newArticle);
