@@ -3,12 +3,13 @@ using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Driver;
 using System;
 
-namespace NewsParsersLib.Articles
+namespace BaseLib
 {
     [Serializable]
     public abstract class ArticleBase
     {
-        [NonSerialized] [BsonId]
+        [NonSerialized]
+        [BsonId]
         protected ObjectId _mongoId;
 
         protected ArticleBase()
@@ -20,9 +21,8 @@ namespace NewsParsersLib.Articles
 
         }
         public string Title { get; set; }
-
         public string Text { get; set; }
         public string Link { get; set; }
-        public abstract BsonDocument toBson();
+        public abstract BsonDocument toBson(MongoDatabase db);
     }
 }

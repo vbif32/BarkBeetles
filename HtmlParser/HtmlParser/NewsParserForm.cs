@@ -33,6 +33,23 @@ namespace HtmlParser
             }
         }
 
+        private void SearchTextBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                if (LooksLikeTruth(PathTextBox.Text))
+                {
+                    StatusLabel.Text = Program.parserManager.TryParse(PathTextBox.Text);
+                    toXmlButton.Visible = true;
+                    ToDatabaseButton.Visible = true;
+                }
+                else
+                {
+                    StatusLabel.Text = "Ссылка неправильная";
+                }
+            }
+        }
+
         private void OpenFileButton_Click(object sender, EventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -96,20 +113,20 @@ namespace HtmlParser
             {
                 if (TitleCheckBox.Checked)
                 {
-                    StatusLabel.Text = "Найдено " + Program.searchManager.TitleSearch(SearchTextBox.Text);
+                    StatusLabel.Text = "Найдено " + Program.searchManager.Search("title" ,SearchTextBox.Text).Count();
                 }
                 if (TextCheckBox.Checked)
                 {
-                    StatusLabel.Text = "Найдено " + Program.searchManager.TextSearch(SearchTextBox.Text);
+                    StatusLabel.Text = "Найдено " + Program.searchManager.Search("text", SearchTextBox.Text).Count();
                 }
                 if (DateCheckBox.Checked)
                 {
-
+                    StatusLabel.Text = "Найдено " + Program.searchManager.DateSearch(SearchTextBox.Text).Count();
                 }
             }
             else
             {
-                StatusLabel.Text = "Введи";
+                StatusLabel.Text = "Введите запрос";
             }
         }
 

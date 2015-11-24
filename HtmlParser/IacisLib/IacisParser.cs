@@ -2,11 +2,14 @@
 using System.Linq;
 using HtmlAgilityPack;
 using System.IO;
-using NewsParsersLib.Articles;
 using System.Net;
 using System.Text;
+using BaseLib;
+using System.Text.RegularExpressions;
+using MongoDB.Bson.Serialization.Attributes;
+using System;
 
-namespace NewsParsersLib.Parsers
+namespace IacisLib
 {
     public class IacisParser : ParserBase
     {
@@ -106,8 +109,10 @@ namespace NewsParsersLib.Parsers
             article = new IacisArticle(title, text, author, date, imageCaption, imagesList);
             return article;
         }
+        
         public override List<ArticleBase> ParseLink(string source)
         {
+
             HtmlDocument doc = new HtmlDocument();
             List<ArticleBase> articleList = new List<ArticleBase>();
             string link;
@@ -118,13 +123,13 @@ namespace NewsParsersLib.Parsers
 
             if (source.StartsWith("http"))
             {
-                doc.LoadHtml(new WebClient().DownloadString(source));
+                doc.LoadHtml(new WebClient() { Encoding = Encoding.UTF8}.DownloadString(source));
                 link = source;
             }
             else
             {
                 doc.Load(source, Encoding.GetEncoding("utf-8"));
-                link = ParserManager.GetFileSourceLink(source);
+                link = GetFileSourceLink(doc);
             }
 
             if (link.Contains(_newsMainPage))
@@ -147,9 +152,19 @@ namespace NewsParsersLib.Parsers
 	                }
 	            }
             }
-
-
             return articleList;
+        }
+        private static string GetFileSourceLink(HtmlDocument doc)
+        {
+            string link;
+            if (Regex.IsMatch(doc.DocumentNode.ChildNodes[2].InnerText, "<!-- saved from url=.*-->$"))
+            {
+                link = doc.DocumentNode.ChildNodes[2].InnerText;
+                link = link.Remove(0, link.IndexOf('/') - 5);
+                link = link.Remove(link.LastIndexOf('/') + 1);
+                return link;
+            }
+            return null;
         }
     }
 }

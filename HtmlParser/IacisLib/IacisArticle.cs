@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using BaseLib;
+using MongoDB.Bson;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using MongoDB.Driver.GridFS;
@@ -8,7 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 
-namespace NewsParsersLib.Articles
+namespace IacisLib
 {
     [Serializable]
     public class IacisArticle : ArticleBase
@@ -20,7 +21,7 @@ namespace NewsParsersLib.Articles
             Title = title;
             Text = text;
             Author = author;
-            DateOfPublication = date;
+            DateOfPublication = DateTime.Parse(date);
             ImageCaption = imageCaption;
             Images = images;
         }
@@ -30,25 +31,25 @@ namespace NewsParsersLib.Articles
             Title = title;
             Text = text;
             Author = author;
-            DateOfPublication = date;
+            DateOfPublication = DateTime.Parse(date);
             ImageCaption = imageCaption;
             Images = images;
         }
-        public IacisArticle(BsonDocument doc)
+        public IacisArticle(MongoDatabase db, BsonDocument doc)
         {
             _mongoId = (ObjectId)doc.GetValue("_id");
             Title = doc.GetValue("title").ToString();
             Text = doc.GetValue("text").ToString();
             Link = doc.GetValue("link").ToString();
             Author = doc.GetValue("author").ToString();
-            DateOfPublication = doc.GetValue("dateOfPublication").ToString();
+            DateOfPublication = doc.GetValue("dateOfPublication").ToLocalTime();
             ImageCaption = doc.GetValue("imageCaption").ToString();
             Images = new List<string>();
 
             foreach (var imageId in doc.GetValue("images").AsBsonArray)
             {
                 int i = 0;
-                MongoGridFSFileInfo file = ParserManager.MongoDb.GridFS.FindOne(Query.EQ("_id", imageId));
+                MongoGridFSFileInfo file = db.GridFS.FindOne(Query.EQ("_id", imageId));
                 using (MongoGridFSStream stream = file.OpenRead())
                 {
                     var bytes = new byte[stream.Length];
@@ -63,11 +64,11 @@ namespace NewsParsersLib.Articles
         }
 
         public string Author { get; set; }
-        public string DateOfPublication { get; set; }
+        public DateTime DateOfPublication { get; set; }
         public string ImageCaption { get; set; }
         public List<string> Images { get; set; }
 
-        public override BsonDocument toBson()
+        public override BsonDocument toBson(MongoDatabase db)
         {
             var newDoc = new BsonDocument() {
                 { "_id", _mongoId },
@@ -80,7 +81,7 @@ namespace NewsParsersLib.Articles
             };
             if (Images.Count != 0)
             {
-                newDoc.Add("images", uploadImagesToDb());
+                newDoc.Add("images", uploadImagesToDb(db));
             }
             else
                 newDoc.Add("images", null);
@@ -88,11 +89,7 @@ namespace NewsParsersLib.Articles
         }
 
         delegate Stream streamDelegate(string s);
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public BsonArray uploadImagesToDb()
+        public BsonArray uploadImagesToDb(MongoDatabase db)
         {
             BsonArray dbImages = new BsonArray();
             if (Images.Count != 0)
@@ -108,7 +105,7 @@ namespace NewsParsersLib.Articles
                 foreach (var image in Images)
                     using (var fs = openRead(image))
                     {
-                        MongoGridFSFileInfo gridFsInfo = ParserManager.MongoDb.GridFS.Upload(fs, image.Substring(image.LastIndexOf('/')));
+                        MongoGridFSFileInfo gridFsInfo = db.GridFS.Upload(fs, image.Substring(image.LastIndexOf('/')));
                         dbImages.Add(gridFsInfo.Id);
                     }
             }

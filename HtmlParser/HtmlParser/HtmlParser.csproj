@@ -112,6 +112,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BaseLib\BaseLib.csproj">
+      <Project>{03d8cb6c-e484-4024-a2bc-710105e87608}</Project>
+      <Name>BaseLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NewsParsersLib\NewsParsersLib.csproj">
       <Project>{446e2bc7-e49f-4d70-85f2-3e456a9ecfb7}</Project>
       <Name>NewsParsersLib</Name>

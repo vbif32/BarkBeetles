@@ -1,8 +1,7 @@
 ﻿using HtmlAgilityPack;
-using NewsParsersLib.Articles;
 using System.Collections.Generic;
 
-namespace NewsParsersLib.Parsers
+namespace BaseLib
 {
     public abstract class ParserBase
     {
