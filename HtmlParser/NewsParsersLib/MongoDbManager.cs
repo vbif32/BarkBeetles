@@ -26,7 +26,6 @@ namespace NewsParsersLib
             var query = Query.Matches(field, value);
             var curCollection = curDb.GetCollection("articles");
             var cursor = curCollection.Find(query);
-            cursor.
             return curCollection.Find(query);
         }
         public bool DropCollection(string collectionName)

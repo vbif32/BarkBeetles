@@ -47,6 +47,7 @@ namespace HtmlParser
             this.TitleResultsLabel = new System.Windows.Forms.Label();
             this.TextResultsLabel = new System.Windows.Forms.Label();
             this.DateResultsLabel = new System.Windows.Forms.Label();
+            this.DropCollectionButton = new System.Windows.Forms.Button();
             InstructionLabel = new System.Windows.Forms.Label();
             SearchInstructionLabel = new System.Windows.Forms.Label();
             LookForLabel = new System.Windows.Forms.Label();
@@ -72,6 +73,24 @@ namespace HtmlParser
             SearchInstructionLabel.Size = new System.Drawing.Size(290, 13);
             SearchInstructionLabel.TabIndex = 7;
             SearchInstructionLabel.Text = "Введите искомое значение и выберите область поиска";
+            // 
+            // LookForLabel
+            // 
+            LookForLabel.AutoSize = true;
+            LookForLabel.Location = new System.Drawing.Point(12, 123);
+            LookForLabel.Name = "LookForLabel";
+            LookForLabel.Size = new System.Drawing.Size(44, 13);
+            LookForLabel.TabIndex = 12;
+            LookForLabel.Text = "Искать";
+            // 
+            // FoundLabel
+            // 
+            FoundLabel.AutoSize = true;
+            FoundLabel.Location = new System.Drawing.Point(101, 123);
+            FoundLabel.Name = "FoundLabel";
+            FoundLabel.Size = new System.Drawing.Size(51, 13);
+            FoundLabel.TabIndex = 13;
+            FoundLabel.Text = "Найдено";
             // 
             // PathTextBox
             // 
@@ -168,24 +187,6 @@ namespace HtmlParser
             this.DateCheckBox.Text = "Дата";
             this.DateCheckBox.UseVisualStyleBackColor = true;
             // 
-            // LookForLabel
-            // 
-            LookForLabel.AutoSize = true;
-            LookForLabel.Location = new System.Drawing.Point(12, 123);
-            LookForLabel.Name = "LookForLabel";
-            LookForLabel.Size = new System.Drawing.Size(44, 13);
-            LookForLabel.TabIndex = 12;
-            LookForLabel.Text = "Искать";
-            // 
-            // FoundLabel
-            // 
-            FoundLabel.AutoSize = true;
-            FoundLabel.Location = new System.Drawing.Point(101, 123);
-            FoundLabel.Name = "FoundLabel";
-            FoundLabel.Size = new System.Drawing.Size(51, 13);
-            FoundLabel.TabIndex = 13;
-            FoundLabel.Text = "Найдено";
-            // 
             // TitleResultsLabel
             // 
             this.TitleResultsLabel.AutoSize = true;
@@ -210,11 +211,22 @@ namespace HtmlParser
             this.DateResultsLabel.Size = new System.Drawing.Size(0, 13);
             this.DateResultsLabel.TabIndex = 16;
             // 
+            // DropCollectionButton
+            // 
+            this.DropCollectionButton.Location = new System.Drawing.Point(297, 186);
+            this.DropCollectionButton.Name = "DropCollectionButton";
+            this.DropCollectionButton.Size = new System.Drawing.Size(125, 23);
+            this.DropCollectionButton.TabIndex = 18;
+            this.DropCollectionButton.Text = "Сбросить коллекцию";
+            this.DropCollectionButton.UseVisualStyleBackColor = true;
+            this.DropCollectionButton.Click += new System.EventHandler(this.DropCollectionButton_Click);
+            // 
             // NewsParserForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(434, 221);
+            this.Controls.Add(this.DropCollectionButton);
             this.Controls.Add(this.DateResultsLabel);
             this.Controls.Add(this.TextResultsLabel);
             this.Controls.Add(this.TitleResultsLabel);
@@ -253,6 +265,7 @@ namespace HtmlParser
         private System.Windows.Forms.Label TitleResultsLabel;
         private System.Windows.Forms.Label TextResultsLabel;
         private System.Windows.Forms.Label DateResultsLabel;
+        private System.Windows.Forms.Button DropCollectionButton;
     }
 }
 

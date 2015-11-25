@@ -9,8 +9,6 @@ namespace HtmlParser
         private static string _netPathPattern = @"^http\w?://";
         private static string _localPathPattern = @"^\w:\\";
 
-
-
         public NewsParserForm()
         {
             InitializeComponent();
@@ -113,15 +111,15 @@ namespace HtmlParser
             {
                 if (TitleCheckBox.Checked)
                 {
-                    StatusLabel.Text = "Найдено " + Program.searchManager.Search("title" ,SearchTextBox.Text).Count();
+                    StatusLabel.Text = "Найдено " + Program.mongoDbManager.Search("title" ,SearchTextBox.Text).Count();
                 }
                 if (TextCheckBox.Checked)
                 {
-                    StatusLabel.Text = "Найдено " + Program.searchManager.Search("text", SearchTextBox.Text).Count();
+                    StatusLabel.Text = "Найдено " + Program.mongoDbManager.Search("text", SearchTextBox.Text).Count();
                 }
                 if (DateCheckBox.Checked)
                 {
-                    StatusLabel.Text = "Найдено " + Program.searchManager.DateSearch(SearchTextBox.Text).Count();
+                    StatusLabel.Text = "Найдено " + Program.mongoDbManager.DateSearch(SearchTextBox.Text).Count();
                 }
             }
             else
@@ -137,5 +135,19 @@ namespace HtmlParser
             return false;
         }
 
+        private void DropCollectionButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Program.mongoDbManager.DropCollection("articles"))
+                    StatusLabel.Text = "Коллекция успешно сброшена";
+                else
+                    StatusLabel.Text = "Коллекция не существовала";
+            }
+            catch
+            {
+                StatusLabel.Text = "Ошибка при работе с базой";
+            }
+        }
     }
 }
