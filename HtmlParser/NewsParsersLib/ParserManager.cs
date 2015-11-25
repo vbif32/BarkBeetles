@@ -1,10 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
-using System.Linq;
 using MongoDB.Driver;
 using BaseLib;
-using IacisLib;
 
 namespace NewsParsersLib
 {
@@ -57,15 +55,6 @@ namespace NewsParsersLib
                 XmlSerializer serializer = new XmlSerializer(article.GetType());
                 serializer.Serialize(а, article);
             }
-        }
-        public void ToDatabase()
-        {
-            var articleCollection = MongoDb.GetCollection("articles");
-            foreach (ArticleBase article in ArticleList)
-            {
-                articleCollection.Insert(article.toBson(MongoDb));
-            }
-            var test = new IacisArticle(MongoDb,articleCollection.FindAll().Last());
         }
 
     }

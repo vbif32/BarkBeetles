@@ -1,28 +1,22 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Driver;
-using System;
+﻿using System;
+using System.Collections.Generic;
 
 namespace BaseLib
 {
     [Serializable]
     public abstract class ArticleBase
     {
-        [NonSerialized]
-        [BsonId]
-        protected ObjectId _mongoId;
-
-        protected ArticleBase()
-        {
-            _mongoId = ObjectId.GenerateNewId();
-        }
-        public ArticleBase(BsonDocument doc)
-        {
-
-        }
+//         [NonSerialized]
+//         [BsonId]
+//         protected ObjectId _mongoId;
+// 
+//         protected ArticleBase()
+//         {
+//             _mongoId = ObjectId.GenerateNewId();
+//         }
         public string Title { get; set; }
         public string Text { get; set; }
         public string Link { get; set; }
-        public abstract BsonDocument toBson(MongoDatabase db);
+        public abstract IDictionary<string, object> getFields();
     }
 }
