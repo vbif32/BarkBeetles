@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F8A9B93B-53CA-409A-B409-5C147D93972A}</ProjectGuid>
+    <ProjectGuid>{42E4B577-B6E7-4D97-8FC0-9645834C70BF}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>HtmlParser</RootNamespace>
@@ -115,6 +115,10 @@
     <ProjectReference Include="..\BaseLib\BaseLib.csproj">
       <Project>{03d8cb6c-e484-4024-a2bc-710105e87608}</Project>
       <Name>BaseLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MongoDBLib\MongoDBLib.csproj">
+      <Project>{dabd989f-1260-42bc-89c9-e4a17b40d594}</Project>
+      <Name>MongoDBLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\NewsParsersLib\NewsParsersLib.csproj">
       <Project>{446e2bc7-e49f-4d70-85f2-3e456a9ecfb7}</Project>

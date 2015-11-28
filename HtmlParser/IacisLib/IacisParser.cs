@@ -97,7 +97,7 @@ namespace IacisLib
 	                var images = ImageWithCaption.First().ChildNodes.Where(x => x.Name == "li");
 	                foreach (HtmlNode image in images)
 	                {
-                        string src = image.Element("li").Element("img").GetAttributeValue("src", "notFound");
+                        string src = image.Element("a").Element("img").GetAttributeValue("src", "notFound");
                         if (src.StartsWith("."))
                             imagePath = Path.GetFullPath(_currentArticleSource + src.Substring(1));
                         else

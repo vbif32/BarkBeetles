@@ -48,17 +48,24 @@ namespace HtmlParser
             this.TextResultsLabel = new System.Windows.Forms.Label();
             this.DateResultsLabel = new System.Windows.Forms.Label();
             this.DropCollectionButton = new System.Windows.Forms.Button();
+            this.MainTabControl = new System.Windows.Forms.TabControl();
+            this.ParserTabPage = new System.Windows.Forms.TabPage();
+            this.DatabaseSearchTabPage = new System.Windows.Forms.TabPage();
+            this.DeleteFoundButton = new System.Windows.Forms.Button();
             InstructionLabel = new System.Windows.Forms.Label();
             SearchInstructionLabel = new System.Windows.Forms.Label();
             LookForLabel = new System.Windows.Forms.Label();
             FoundLabel = new System.Windows.Forms.Label();
+            this.MainTabControl.SuspendLayout();
+            this.ParserTabPage.SuspendLayout();
+            this.DatabaseSearchTabPage.SuspendLayout();
             this.SuspendLayout();
             // 
             // InstructionLabel
             // 
             InstructionLabel.AutoSize = true;
             InstructionLabel.CausesValidation = false;
-            InstructionLabel.Location = new System.Drawing.Point(12, 9);
+            InstructionLabel.Location = new System.Drawing.Point(6, 3);
             InstructionLabel.Name = "InstructionLabel";
             InstructionLabel.Size = new System.Drawing.Size(230, 13);
             InstructionLabel.TabIndex = 0;
@@ -68,7 +75,7 @@ namespace HtmlParser
             // 
             SearchInstructionLabel.AutoSize = true;
             SearchInstructionLabel.CausesValidation = false;
-            SearchInstructionLabel.Location = new System.Drawing.Point(15, 84);
+            SearchInstructionLabel.Location = new System.Drawing.Point(6, 3);
             SearchInstructionLabel.Name = "SearchInstructionLabel";
             SearchInstructionLabel.Size = new System.Drawing.Size(290, 13);
             SearchInstructionLabel.TabIndex = 7;
@@ -77,7 +84,7 @@ namespace HtmlParser
             // LookForLabel
             // 
             LookForLabel.AutoSize = true;
-            LookForLabel.Location = new System.Drawing.Point(12, 123);
+            LookForLabel.Location = new System.Drawing.Point(3, 42);
             LookForLabel.Name = "LookForLabel";
             LookForLabel.Size = new System.Drawing.Size(44, 13);
             LookForLabel.TabIndex = 12;
@@ -86,7 +93,7 @@ namespace HtmlParser
             // FoundLabel
             // 
             FoundLabel.AutoSize = true;
-            FoundLabel.Location = new System.Drawing.Point(101, 123);
+            FoundLabel.Location = new System.Drawing.Point(92, 42);
             FoundLabel.Name = "FoundLabel";
             FoundLabel.Size = new System.Drawing.Size(51, 13);
             FoundLabel.TabIndex = 13;
@@ -94,7 +101,7 @@ namespace HtmlParser
             // 
             // PathTextBox
             // 
-            this.PathTextBox.Location = new System.Drawing.Point(15, 25);
+            this.PathTextBox.Location = new System.Drawing.Point(9, 19);
             this.PathTextBox.Name = "PathTextBox";
             this.PathTextBox.Size = new System.Drawing.Size(325, 20);
             this.PathTextBox.TabIndex = 1;
@@ -102,7 +109,7 @@ namespace HtmlParser
             // 
             // OpenFileButton
             // 
-            this.OpenFileButton.Location = new System.Drawing.Point(347, 23);
+            this.OpenFileButton.Location = new System.Drawing.Point(341, 17);
             this.OpenFileButton.Name = "OpenFileButton";
             this.OpenFileButton.Size = new System.Drawing.Size(75, 23);
             this.OpenFileButton.TabIndex = 2;
@@ -113,36 +120,34 @@ namespace HtmlParser
             // StatusLabel
             // 
             this.StatusLabel.AutoSize = true;
-            this.StatusLabel.Location = new System.Drawing.Point(15, 52);
+            this.StatusLabel.Location = new System.Drawing.Point(9, 177);
             this.StatusLabel.Name = "StatusLabel";
             this.StatusLabel.Size = new System.Drawing.Size(0, 13);
             this.StatusLabel.TabIndex = 3;
             // 
             // toXmlButton
             // 
-            this.toXmlButton.Location = new System.Drawing.Point(347, 52);
+            this.toXmlButton.Location = new System.Drawing.Point(281, 46);
             this.toXmlButton.Name = "toXmlButton";
-            this.toXmlButton.Size = new System.Drawing.Size(75, 23);
+            this.toXmlButton.Size = new System.Drawing.Size(135, 23);
             this.toXmlButton.TabIndex = 4;
-            this.toXmlButton.Text = "to XML";
+            this.toXmlButton.Text = "Положить в XML";
             this.toXmlButton.UseVisualStyleBackColor = true;
-            this.toXmlButton.Visible = false;
             this.toXmlButton.Click += new System.EventHandler(this.ToXmlButton_Click);
             // 
             // ToDatabaseButton
             // 
-            this.ToDatabaseButton.Location = new System.Drawing.Point(265, 51);
+            this.ToDatabaseButton.Location = new System.Drawing.Point(140, 46);
             this.ToDatabaseButton.Name = "ToDatabaseButton";
-            this.ToDatabaseButton.Size = new System.Drawing.Size(75, 23);
+            this.ToDatabaseButton.Size = new System.Drawing.Size(135, 23);
             this.ToDatabaseButton.TabIndex = 6;
-            this.ToDatabaseButton.Text = "to Database";
+            this.ToDatabaseButton.Text = "Положить в MongoDB";
             this.ToDatabaseButton.UseVisualStyleBackColor = true;
-            this.ToDatabaseButton.Visible = false;
             this.ToDatabaseButton.Click += new System.EventHandler(this.ToDatabaseButton_Click);
             // 
             // DBSearchButton
             // 
-            this.DBSearchButton.Location = new System.Drawing.Point(346, 97);
+            this.DBSearchButton.Location = new System.Drawing.Point(341, 17);
             this.DBSearchButton.Name = "DBSearchButton";
             this.DBSearchButton.Size = new System.Drawing.Size(75, 23);
             this.DBSearchButton.TabIndex = 5;
@@ -152,15 +157,16 @@ namespace HtmlParser
             // 
             // SearchTextBox
             // 
-            this.SearchTextBox.Location = new System.Drawing.Point(15, 100);
+            this.SearchTextBox.Location = new System.Drawing.Point(9, 19);
             this.SearchTextBox.Name = "SearchTextBox";
             this.SearchTextBox.Size = new System.Drawing.Size(325, 20);
             this.SearchTextBox.TabIndex = 8;
+            this.SearchTextBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.SearchTextBox_KeyDown);
             // 
             // TitleCheckBox
             // 
             this.TitleCheckBox.AutoSize = true;
-            this.TitleCheckBox.Location = new System.Drawing.Point(15, 139);
+            this.TitleCheckBox.Location = new System.Drawing.Point(6, 58);
             this.TitleCheckBox.Name = "TitleCheckBox";
             this.TitleCheckBox.Size = new System.Drawing.Size(80, 17);
             this.TitleCheckBox.TabIndex = 9;
@@ -170,7 +176,7 @@ namespace HtmlParser
             // TextCheckBox
             // 
             this.TextCheckBox.AutoSize = true;
-            this.TextCheckBox.Location = new System.Drawing.Point(15, 162);
+            this.TextCheckBox.Location = new System.Drawing.Point(6, 81);
             this.TextCheckBox.Name = "TextCheckBox";
             this.TextCheckBox.Size = new System.Drawing.Size(56, 17);
             this.TextCheckBox.TabIndex = 10;
@@ -180,7 +186,7 @@ namespace HtmlParser
             // DateCheckBox
             // 
             this.DateCheckBox.AutoSize = true;
-            this.DateCheckBox.Location = new System.Drawing.Point(15, 185);
+            this.DateCheckBox.Location = new System.Drawing.Point(6, 104);
             this.DateCheckBox.Name = "DateCheckBox";
             this.DateCheckBox.Size = new System.Drawing.Size(52, 17);
             this.DateCheckBox.TabIndex = 11;
@@ -190,7 +196,7 @@ namespace HtmlParser
             // TitleResultsLabel
             // 
             this.TitleResultsLabel.AutoSize = true;
-            this.TitleResultsLabel.Location = new System.Drawing.Point(101, 143);
+            this.TitleResultsLabel.Location = new System.Drawing.Point(92, 62);
             this.TitleResultsLabel.Name = "TitleResultsLabel";
             this.TitleResultsLabel.Size = new System.Drawing.Size(0, 13);
             this.TitleResultsLabel.TabIndex = 14;
@@ -198,7 +204,7 @@ namespace HtmlParser
             // TextResultsLabel
             // 
             this.TextResultsLabel.AutoSize = true;
-            this.TextResultsLabel.Location = new System.Drawing.Point(101, 166);
+            this.TextResultsLabel.Location = new System.Drawing.Point(92, 85);
             this.TextResultsLabel.Name = "TextResultsLabel";
             this.TextResultsLabel.Size = new System.Drawing.Size(0, 13);
             this.TextResultsLabel.TabIndex = 15;
@@ -206,46 +212,93 @@ namespace HtmlParser
             // DateResultsLabel
             // 
             this.DateResultsLabel.AutoSize = true;
-            this.DateResultsLabel.Location = new System.Drawing.Point(101, 189);
+            this.DateResultsLabel.Location = new System.Drawing.Point(92, 108);
             this.DateResultsLabel.Name = "DateResultsLabel";
             this.DateResultsLabel.Size = new System.Drawing.Size(0, 13);
             this.DateResultsLabel.TabIndex = 16;
             // 
             // DropCollectionButton
             // 
-            this.DropCollectionButton.Location = new System.Drawing.Point(297, 186);
+            this.DropCollectionButton.Location = new System.Drawing.Point(277, 100);
             this.DropCollectionButton.Name = "DropCollectionButton";
-            this.DropCollectionButton.Size = new System.Drawing.Size(125, 23);
+            this.DropCollectionButton.Size = new System.Drawing.Size(135, 23);
             this.DropCollectionButton.TabIndex = 18;
             this.DropCollectionButton.Text = "Сбросить коллекцию";
             this.DropCollectionButton.UseVisualStyleBackColor = true;
             this.DropCollectionButton.Click += new System.EventHandler(this.DropCollectionButton_Click);
             // 
+            // MainTabControl
+            // 
+            this.MainTabControl.Controls.Add(this.ParserTabPage);
+            this.MainTabControl.Controls.Add(this.DatabaseSearchTabPage);
+            this.MainTabControl.Location = new System.Drawing.Point(12, 12);
+            this.MainTabControl.Name = "MainTabControl";
+            this.MainTabControl.SelectedIndex = 0;
+            this.MainTabControl.Size = new System.Drawing.Size(430, 162);
+            this.MainTabControl.TabIndex = 19;
+            // 
+            // ParserTabPage
+            // 
+            this.ParserTabPage.Controls.Add(InstructionLabel);
+            this.ParserTabPage.Controls.Add(this.PathTextBox);
+            this.ParserTabPage.Controls.Add(this.OpenFileButton);
+            this.ParserTabPage.Controls.Add(this.toXmlButton);
+            this.ParserTabPage.Controls.Add(this.ToDatabaseButton);
+            this.ParserTabPage.Location = new System.Drawing.Point(4, 22);
+            this.ParserTabPage.Name = "ParserTabPage";
+            this.ParserTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.ParserTabPage.Size = new System.Drawing.Size(422, 136);
+            this.ParserTabPage.TabIndex = 0;
+            this.ParserTabPage.Text = "Парсер";
+            this.ParserTabPage.UseVisualStyleBackColor = true;
+            // 
+            // DatabaseSearchTabPage
+            // 
+            this.DatabaseSearchTabPage.Controls.Add(this.DeleteFoundButton);
+            this.DatabaseSearchTabPage.Controls.Add(SearchInstructionLabel);
+            this.DatabaseSearchTabPage.Controls.Add(this.DropCollectionButton);
+            this.DatabaseSearchTabPage.Controls.Add(this.DateResultsLabel);
+            this.DatabaseSearchTabPage.Controls.Add(this.DBSearchButton);
+            this.DatabaseSearchTabPage.Controls.Add(this.TextResultsLabel);
+            this.DatabaseSearchTabPage.Controls.Add(this.SearchTextBox);
+            this.DatabaseSearchTabPage.Controls.Add(this.TitleResultsLabel);
+            this.DatabaseSearchTabPage.Controls.Add(this.TitleCheckBox);
+            this.DatabaseSearchTabPage.Controls.Add(FoundLabel);
+            this.DatabaseSearchTabPage.Controls.Add(this.TextCheckBox);
+            this.DatabaseSearchTabPage.Controls.Add(LookForLabel);
+            this.DatabaseSearchTabPage.Controls.Add(this.DateCheckBox);
+            this.DatabaseSearchTabPage.Location = new System.Drawing.Point(4, 22);
+            this.DatabaseSearchTabPage.Name = "DatabaseSearchTabPage";
+            this.DatabaseSearchTabPage.Padding = new System.Windows.Forms.Padding(3);
+            this.DatabaseSearchTabPage.Size = new System.Drawing.Size(422, 136);
+            this.DatabaseSearchTabPage.TabIndex = 1;
+            this.DatabaseSearchTabPage.Text = "Поиск по БД";
+            this.DatabaseSearchTabPage.UseVisualStyleBackColor = true;
+            // 
+            // DeleteFoundButton
+            // 
+            this.DeleteFoundButton.Location = new System.Drawing.Point(277, 71);
+            this.DeleteFoundButton.Name = "DeleteFoundButton";
+            this.DeleteFoundButton.Size = new System.Drawing.Size(134, 23);
+            this.DeleteFoundButton.TabIndex = 19;
+            this.DeleteFoundButton.Text = "Удалить найденные";
+            this.DeleteFoundButton.UseVisualStyleBackColor = true;
+            this.DeleteFoundButton.Click += new System.EventHandler(this.DeleteFoundButton_Click);
+            // 
             // NewsParserForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(434, 221);
-            this.Controls.Add(this.DropCollectionButton);
-            this.Controls.Add(this.DateResultsLabel);
-            this.Controls.Add(this.TextResultsLabel);
-            this.Controls.Add(this.TitleResultsLabel);
-            this.Controls.Add(FoundLabel);
-            this.Controls.Add(LookForLabel);
-            this.Controls.Add(this.DateCheckBox);
-            this.Controls.Add(this.TextCheckBox);
-            this.Controls.Add(this.TitleCheckBox);
-            this.Controls.Add(this.SearchTextBox);
-            this.Controls.Add(SearchInstructionLabel);
-            this.Controls.Add(this.ToDatabaseButton);
-            this.Controls.Add(this.DBSearchButton);
-            this.Controls.Add(this.toXmlButton);
+            this.ClientSize = new System.Drawing.Size(454, 199);
+            this.Controls.Add(this.MainTabControl);
             this.Controls.Add(this.StatusLabel);
-            this.Controls.Add(this.OpenFileButton);
-            this.Controls.Add(this.PathTextBox);
-            this.Controls.Add(InstructionLabel);
             this.Name = "NewsParserForm";
             this.Text = "NewsParser";
+            this.MainTabControl.ResumeLayout(false);
+            this.ParserTabPage.ResumeLayout(false);
+            this.ParserTabPage.PerformLayout();
+            this.DatabaseSearchTabPage.ResumeLayout(false);
+            this.DatabaseSearchTabPage.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -266,6 +319,10 @@ namespace HtmlParser
         private System.Windows.Forms.Label TextResultsLabel;
         private System.Windows.Forms.Label DateResultsLabel;
         private System.Windows.Forms.Button DropCollectionButton;
+        private System.Windows.Forms.TabControl MainTabControl;
+        private System.Windows.Forms.TabPage ParserTabPage;
+        private System.Windows.Forms.TabPage DatabaseSearchTabPage;
+        private System.Windows.Forms.Button DeleteFoundButton;
     }
 }
 

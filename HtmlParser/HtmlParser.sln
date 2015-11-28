@@ -3,13 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HtmlParser", "HtmlParser\HtmlParser.csproj", "{F8A9B93B-53CA-409A-B409-5C147D93972A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsParsersLib", "NewsParsersLib\NewsParsersLib.csproj", "{446E2BC7-E49F-4D70-85F2-3E456A9ECFB7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BaseLib", "BaseLib\BaseLib.csproj", "{03D8CB6C-E484-4024-A2BC-710105E87608}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IacisLib", "IacisLib\IacisLib.csproj", "{3E954D2A-814C-4D98-950E-F40631C1B1ED}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsParserMain", "HtmlParserMain\NewsParserMain.csproj", "{42E4B577-B6E7-4D97-8FC0-9645834C70BF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MongoDBLib", "MongoDBLib\MongoDBLib.csproj", "{DABD989F-1260-42BC-89C9-E4A17B40D594}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +19,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{F8A9B93B-53CA-409A-B409-5C147D93972A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F8A9B93B-53CA-409A-B409-5C147D93972A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F8A9B93B-53CA-409A-B409-5C147D93972A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F8A9B93B-53CA-409A-B409-5C147D93972A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{446E2BC7-E49F-4D70-85F2-3E456A9ECFB7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{446E2BC7-E49F-4D70-85F2-3E456A9ECFB7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{446E2BC7-E49F-4D70-85F2-3E456A9ECFB7}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -33,6 +31,14 @@ Global
 		{3E954D2A-814C-4D98-950E-F40631C1B1ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E954D2A-814C-4D98-950E-F40631C1B1ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E954D2A-814C-4D98-950E-F40631C1B1ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{42E4B577-B6E7-4D97-8FC0-9645834C70BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{42E4B577-B6E7-4D97-8FC0-9645834C70BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{42E4B577-B6E7-4D97-8FC0-9645834C70BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{42E4B577-B6E7-4D97-8FC0-9645834C70BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DABD989F-1260-42BC-89C9-E4A17B40D594}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DABD989F-1260-42BC-89C9-E4A17B40D594}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DABD989F-1260-42BC-89C9-E4A17B40D594}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DABD989F-1260-42BC-89C9-E4A17B40D594}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

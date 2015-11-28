@@ -9,7 +9,7 @@ namespace NewsParsersLib
     public class ParserManager
     {
         public List<ArticleBase> ArticleList { get; private set; }
-        public static MongoDatabase MongoDb { get; set; }
+        public MongoDatabase MongoDb { get; set; }
 
         private ParserBase LastUsedParser;
 
