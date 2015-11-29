@@ -6,11 +6,13 @@ using System.Net;
 using System.Text;
 using BaseLib;
 using System.Text.RegularExpressions;
-using MongoDB.Bson.Serialization.Attributes;
-using System;
 
 namespace IacisLib
 {
+    /// <summary>
+    /// Класс, описывающий парсер для сайта iacis
+    /// Возможно динамическое подключение как плагина
+    /// </summary>
     public class IacisParser : ParserBase
     {
         new public const string SiteDomen = "iacis.ru";

@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace IacisLib
 {
+    /// <summary>
+    /// Класс описывающий статью на новостном сайте iacis.ru
+    /// </summary>
     [Serializable]
     public class IacisArticle : ArticleBase
     {
@@ -28,39 +31,26 @@ namespace IacisLib
             ImageCaption = imageCaption;
             Images = images;
         }
-//         public IacisArticle(MongoDatabase db, BsonDocument doc)
-//         {
-//             _mongoId = (ObjectId)doc.GetValue("_id");
-//             Title = doc.GetValue("title").ToString();
-//             Text = doc.GetValue("text").ToString();
-//             Link = doc.GetValue("link").ToString();
-//             Author = doc.GetValue("author").ToString();
-//             DateOfPublication = doc.GetValue("dateOfPublication").ToLocalTime();
-//             ImageCaption = doc.GetValue("imageCaption").ToString();
-//             Images = new List<string>();
-// 
-//             foreach (var imageId in doc.GetValue("images").AsBsonArray)
-//             {
-//                 int i = 0;
-//                 MongoGridFSFileInfo file = db.GridFS.FindOne(Query.EQ("_id", imageId));
-//                 using (MongoGridFSStream stream = file.OpenRead())
-//                 {
-//                     var bytes = new byte[stream.Length];
-//                     stream.Read(bytes, 0, (int)stream.Length);
-//                     using (var newFs = new FileStream(i + ".jpg", FileMode.Create))
-//                     {
-//                         newFs.Write(bytes, 0, bytes.Length);
-//                         Images.Add(Path.GetFullPath(i + ".jpg"));
-//                     }
-//                 }
-//             }
-//         }
 
         public string Author { get; set; }
         public DateTime DateOfPublication { get; set; }
+        /// <summary>
+        /// Подпись под картинкой статьи, всегда одна
+        /// </summary>
         public string ImageCaption { get; set; }
+        /// <summary>
+        /// Картинки в статье, может быть много, 
+        /// хранятся в виде списка путей к картинкам
+        /// в случае парса сайта - пути к картинкам в интернете
+        /// в случае парса файла - пути к картинкам на диске
+        /// </summary>
         public List<string> Images { get; set; }
-
+        /// <summary>
+        /// Метод для создания записи в базе данных.
+        /// </summary>
+        /// <returns> 
+        /// Название поля с маленькой буквы - значение поля
+        /// </returns>
         public override IDictionary<string, object> getFields()
         {
             var newDoc = new Dictionary<string, object>() {
@@ -73,14 +63,7 @@ namespace IacisLib
                 { "imageCaption", ImageCaption },
                 { "images", Images},
             };
-//             if (Images.Count != 0)
-//             {
-//                 newDoc.Add("images", Images);
-//             }
-//             else
-//                 newDoc.Add("images", null);
             return newDoc;
         }
-
     }
 }
