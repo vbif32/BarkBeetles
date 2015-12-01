@@ -5,7 +5,6 @@ using System.IO;
 using System.Net;
 using System.Text;
 using BaseLib;
-using System.Text.RegularExpressions;
 
 namespace IacisLib
 {
@@ -18,6 +17,61 @@ namespace IacisLib
         new public const string SiteDomen = "iacis.ru";
         new protected const string _newsMainPage = "/pressroom/news";
 
+        /// <summary>
+        /// Преобразует статью по ссылке в список объектов
+        /// </summary>
+        /// <returns> список объектов статьи</returns>
+        public override List<ArticleBase> ParseLink(string source)
+        {
+
+            HtmlDocument doc = new HtmlDocument();
+            List<ArticleBase> articleList = new List<ArticleBase>();
+            string link;
+            _currentArticleSource = source.Replace('\\', '/');
+
+            List<string> newArticlesLinks;
+            IacisArticle newArticle;
+
+            if (source.StartsWith("http"))
+            {
+                doc.LoadHtml(new WebClient() { Encoding = Encoding.UTF8 }.DownloadString(source));
+                link = source;
+            }
+            else
+            {
+                doc.Load(source, Encoding.GetEncoding("utf-8"));
+                link = GetFileSourceLink(doc);
+            }
+
+            if (link.Contains(_newsMainPage))
+            {
+                if (link.Split('/').Length > 6)
+                {
+                    newArticle = (IacisArticle)ParseArticle(doc);
+                    newArticle.Link = link;
+                    articleList.Add(newArticle);
+                }
+                else
+                {
+                    newArticlesLinks = GetArticlesLinks(doc);
+                    foreach (string newLink in newArticlesLinks)
+                    {
+                        doc.LoadHtml(new WebClient().DownloadString(newLink));
+                        newArticle = (IacisArticle)ParseArticle(doc);
+                        newArticle.Link = newLink;
+                        articleList.Add(newArticle);
+                    }
+                }
+            }
+            return articleList;
+        }
+
+        /// <summary>
+        /// Метод извлекающий ссылки и страницы, вызывается если
+        /// страница не содержит статью, а содержит перечисление статей 
+        /// </summary>
+        /// <param name="doc"> Документ из которого исвлекаются ссылки </param>
+        /// <returns>список ссылок на статьи</returns>
         protected override List<string> GetArticlesLinks(HtmlDocument doc)
         {
             HtmlNode html = doc.DocumentNode.Element("html");
@@ -46,6 +100,11 @@ namespace IacisLib
             }
             return articleLinkList;
         }
+
+        /// <summary>
+        /// Преобразует статью по ссылке в список объектов
+        /// </summary>
+        /// <returns> список объектов статьи</returns>
         protected override ArticleBase ParseArticle(HtmlDocument doc)
         {
             IacisArticle article;
@@ -110,63 +169,6 @@ namespace IacisLib
             }
             article = new IacisArticle(title, text, author, date, imageCaption, imagesList);
             return article;
-        }
-        
-        public override List<ArticleBase> ParseLink(string source)
-        {
-
-            HtmlDocument doc = new HtmlDocument();
-            List<ArticleBase> articleList = new List<ArticleBase>();
-            string link;
-            _currentArticleSource = source.Replace('\\', '/');
-
-            List<string> newArticlesLinks;
-            IacisArticle newArticle;
-
-            if (source.StartsWith("http"))
-            {
-                doc.LoadHtml(new WebClient() { Encoding = Encoding.UTF8}.DownloadString(source));
-                link = source;
-            }
-            else
-            {
-                doc.Load(source, Encoding.GetEncoding("utf-8"));
-                link = GetFileSourceLink(doc);
-            }
-
-            if (link.Contains(_newsMainPage))
-            {
-	            if (link.Split('/').Length > 6)
-	            {
-	                newArticle = (IacisArticle)ParseArticle(doc);
-	                newArticle.Link = link;
-	                articleList.Add(newArticle);
-	            }
-	            else
-	            {
-	                newArticlesLinks = GetArticlesLinks(doc);
-	                foreach(string newLink in newArticlesLinks)
-	                {
-	                    doc.LoadHtml(new WebClient().DownloadString(newLink));
-	                    newArticle = (IacisArticle)ParseArticle(doc);
-	                    newArticle.Link = newLink;
-	                    articleList.Add(newArticle);
-	                }
-	            }
-            }
-            return articleList;
-        }
-        private static string GetFileSourceLink(HtmlDocument doc)
-        {
-            string link;
-            if (Regex.IsMatch(doc.DocumentNode.ChildNodes[2].InnerText, "<!-- saved from url=.*-->$"))
-            {
-                link = doc.DocumentNode.ChildNodes[2].InnerText;
-                link = link.Remove(0, link.IndexOf('/') - 5);
-                link = link.Remove(link.LastIndexOf('/') + 1);
-                return link;
-            }
-            return null;
         }
     }
 }
