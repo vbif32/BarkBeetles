@@ -51,7 +51,7 @@ namespace BaseLib
         /// </summary>
         /// <param name="doc"> html-документ, сохраненный из интернета на локальный диск</param>
         /// <returns> ссылку</returns>
-        private static string GetFileSourceLink(HtmlDocument doc)
+        protected static string GetFileSourceLink(HtmlDocument doc)
         {
             string link;
             if (Regex.IsMatch(doc.DocumentNode.ChildNodes[2].InnerText, "<!-- saved from url=.*-->$"))
